@@ -1,14 +1,5 @@
 strategy:
   matrix:
-    windows-msi:
-      imageName: "windows-latest"
-      installerType: "msi"
-    windows-zip:
-      imageName: "windows-latest"
-      installerType: "zip"
-    linux-zip:
-      imageName: "ubuntu-latest"
-      installerType: "zip"
     windows-auto:
       imageName: "windows-latest"
       installerType: "auto"
@@ -21,18 +12,20 @@ pool:
 
 trigger: none
 
-steps:
-  - checkout: self
 
-  - script: echo Azure Pipelines build for $(imageName)!
-    displayName: "🦅 $(imageName)"
-    
+steps:
   - task: SnykSecurityScan@1
     inputs:
       serviceConnectionEndpoint: 'SnykTest'
       testType: 'code'
       failOnIssues: true
       projectName: 'Test1'
+  - checkout: self
+
+  - script: echo Azure Pipelines build for $(imageName)!
+    displayName: "🦅 $(imageName)"
+    
+
 
   # install the latest version of hawkscan
   - task: HawkScanInstall@1
