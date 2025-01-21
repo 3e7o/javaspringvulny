@@ -1,29 +1,37 @@
-trigger: none 
+trigger: none
+
 pool:
-  vmImage: ubuntu-latest 
+  vmImage: ubuntu-latest
 
 steps:
   - checkout: self
 
-  # Instalar HawkScan en función de las variables configuradas
+  # Instalar HawkScan
   - task: HawkScanInstall@1
     inputs:
       version: "4.0.3"
-      installerType: "zip"  # auto
-      installPath: $(if and(eq(variables['installerType'], 'auto'), eq(variables['vmImage'], 'ubuntu-latest')), '/home/vsts/custom', '')
-    condition: always()
+      installerType: "zip"
+      installPath: "/home/vsts/hawk-4.0.3"  # Ruta explícita donde se instalará HawkScan
 
-  # Ejecutar HawkScan para análisis de vulnerabilidades
+  # Asegurar que HawkScan esté en el PATH
+  - script: |
+      echo "Adding HawkScan to PATH"
+      export PATH=$PATH:/home/vsts/hawk-4.0.3
+      echo $PATH
+      which hawk  # Verificar que el comando esté disponible
+    displayName: "Configure HawkScan PATH"
+
+  # Ejecutar HawkScan
   - task: RunHawkScan@1
     inputs:
       configFile: "stackhawk.yml"
       version: "4.0.3"
     env:
       HAWK_API_KEY: $(HAWK_API_KEY)
-      APP_ENV: $(vmImage)  
-      APP_ID: $(appId2)  
-      SARIF_ARTIFACT: true  
-    condition: always()
+      APP_ENV: $(vmImage)
+      APP_ID: $(appId2)
+      SARIF_ARTIFACT: true
+
 
   # (Opcional) Escaneo de seguridad con Snyk
   - task: SnykSecurityScan@1
