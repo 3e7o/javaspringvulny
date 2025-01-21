@@ -12,6 +12,12 @@ trigger: none
 steps:
   - checkout: self
 
+  - task: SnykSecurityScan@1
+    inputs:
+      serviceConnectionEndpoint: 'SnykTest'
+      testType: 'code'
+      failOnIssues: true
+      projectName: 'Test10'
 
   # install the latest version of hawkscan
   - task: HawkScanInstall@1
@@ -44,10 +50,3 @@ steps:
       APP_ENV: $(imageName)
       APP_ID: $(appId2)
       SARIF_ARTIFACT: true
-
-  - task: SnykSecurityScan@1
-    inputs:
-      serviceConnectionEndpoint: 'SnykTest'
-      testType: 'code'
-      failOnIssues: false
-      projectName: 'Test10'
