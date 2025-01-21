@@ -1,13 +1,7 @@
-strategy:
-  matrix:
-    linux-zip:
-      imageName: "ubuntu-latest"
-      installerType: "zip"
-
+trigger: none #main
 pool:
-  vmImage: $(imageName)
-
-trigger: none
+  imageName: "ubuntu-latest"
+  installerType: "zip"
 
 steps:
   - checkout: self
