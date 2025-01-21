@@ -27,12 +27,6 @@ steps:
       jdkArchitectureOption: "x64"
       jdkSourceOption: "PreInstalled"
 
-  # download, then start javaspringVulny in the background
-  - script: |
-      curl -Ls https://github.com/kaakaww/javaspringvulny/releases/download/0.2.0/java-spring-vuly-0.2.0.jar -o ./java-spring-vuly-0.2.0.jar
-      java -jar ./java-spring-vuly-0.2.0.jar &
-    displayName: Start JavaSpringVulny on linux
-    condition: eq(variables['imageName'], 'ubuntu-latest')
   # run hawkscan with the StackHawk Azure Extension
   - task: RunHawkScan@1
     inputs:
