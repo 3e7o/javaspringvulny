@@ -26,6 +26,13 @@ steps:
 
   - script: echo Azure Pipelines build for $(imageName)!
     displayName: "🦅 $(imageName)"
+    
+  - task: SnykSecurityScan@1
+    inputs:
+      serviceConnectionEndpoint: 'SnykTest'
+      testType: 'code'
+      failOnIssues: true
+      projectName: 'Test1'
 
   # install the latest version of hawkscan
   - task: HawkScanInstall@1
@@ -87,9 +94,3 @@ steps:
       APP_ID: $(appId2)
       SARIF_ARTIFACT: true
     condition: and(eq(variables['installerType'], 'auto'), eq(variables['imageName'], 'ubuntu-latest'))
-
-  - task: SnykSecurityScan@1
-    inputs:
-      serviceConnectionEndpoint: 'SnykTest'
-      testType: 'code'
-      failOnIssues: true
