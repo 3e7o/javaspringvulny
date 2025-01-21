@@ -75,6 +75,8 @@ steps:
       SPRING_DATASOURCE_URL: 'jdbc:h2:file:D:\\a\\1\\db\\vulny;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE'
     condition: eq(variables['imageName'], 'windows-latest')
 
+
+
   # run hawkscan with the StackHawk Azure Extension
   - task: RunHawkScan@1
     inputs:
@@ -98,3 +100,4 @@ steps:
       APP_ID: $(appId2)
       SARIF_ARTIFACT: true
     condition: and(eq(variables['installerType'], 'auto'), eq(variables['imageName'], 'ubuntu-latest'))
+    
